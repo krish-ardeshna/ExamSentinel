@@ -12,6 +12,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Pre-populate and bake the demo database directly into the Docker image
+ENV DATABASE_URL=sqlite:///./oepms_fallback.db
+RUN python app/seed.py
+
 ENV PORT=8000
 EXPOSE 8000
 
