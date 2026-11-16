@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: examsentinel-api
+    plan: free
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    healthCheckPath: /docs
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./oepms_fallback.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
