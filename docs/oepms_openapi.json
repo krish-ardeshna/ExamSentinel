@@ -1,0 +1,2185 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Online Exam Proctoring & Management System (OEPMS)",
+    "description": "Full-lifecycle web exam platform featuring role-based access, automated screen proctoring, auto-evaluation, dashboards, and AI concept help via Google Gemini.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login Endpoint",
+        "description": "Authenticate with email and password, return JWT token.",
+        "operationId": "login_endpoint_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout Endpoint",
+        "description": "Stateless JWT logout confirmation.",
+        "operationId": "logout_endpoint_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get Current User Profile",
+        "description": "Return the profile of the authenticated user.",
+        "operationId": "get_current_user_profile_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create User Endpoint",
+        "description": "Admin creates a new user account.",
+        "operationId": "create_user_endpoint_users_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "List Users Endpoint",
+        "description": "List all users (Admin and HOD).",
+        "operationId": "list_users_endpoint_users_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  },
+                  "title": "Response List Users Endpoint Users Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get User Endpoint",
+        "description": "Get single user by ID.",
+        "operationId": "get_user_endpoint_users__user_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update User Endpoint",
+        "description": "Admin updates user details.",
+        "operationId": "update_user_endpoint_users__user_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete User Endpoint",
+        "description": "Admin deletes user with business rule checks.",
+        "operationId": "delete_user_endpoint_users__user_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams": {
+      "get": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "List Exams Endpoint",
+        "description": "List exams depending on user role.",
+        "operationId": "list_exams_endpoint_exams_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExamResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Exams Endpoint Exams Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Create Exam Endpoint",
+        "description": "Teacher schedules a new exam for their own subject.",
+        "operationId": "create_exam_endpoint_exams_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExamCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/exams/subjects/list": {
+      "get": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "List Subjects For Teacher",
+        "description": "List subjects assigned to current teacher (or all subjects for admin/hod).",
+        "operationId": "list_subjects_for_teacher_exams_subjects_list_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/exams/{exam_id}": {
+      "get": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Get Exam Details",
+        "description": "Get exam details.",
+        "operationId": "get_exam_details_exams__exam_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams/{exam_id}/questions": {
+      "post": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Add Question Endpoint",
+        "description": "Add a question to an exam.",
+        "operationId": "add_question_endpoint_exams__exam_id__questions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams/questions/{question_id}": {
+      "put": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Edit Question Endpoint",
+        "description": "Edit question before start time.",
+        "operationId": "edit_question_endpoint_exams_questions__question_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "question_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Question Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams/{exam_id}/answer-key": {
+      "put": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Submit Answer Key Endpoint",
+        "description": "Submit or update official answer key for exam.",
+        "operationId": "submit_answer_key_endpoint_exams__exam_id__answer_key_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerKeyCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams/{exam_id}/publish": {
+      "post": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Publish Exam Endpoint",
+        "description": "Publish exam to students/parents. Checks question count and total marks sum.",
+        "operationId": "publish_exam_endpoint_exams__exam_id__publish_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exams/{exam_id}/paper": {
+      "get": {
+        "tags": [
+          "Exams"
+        ],
+        "summary": "Get Exam Paper Endpoint",
+        "description": "Get exam questions without answer keys.",
+        "operationId": "get_exam_paper_endpoint_exams__exam_id__paper_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionResponse"
+                  },
+                  "title": "Response Get Exam Paper Endpoint Exams  Exam Id  Paper Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attempts": {
+      "post": {
+        "tags": [
+          "Exam Attempts"
+        ],
+        "summary": "Start Attempt Endpoint",
+        "description": "Student starts a new attempt for a published exam inside its window.",
+        "operationId": "start_attempt_endpoint_attempts_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attempts/{attempt_id}": {
+      "get": {
+        "tags": [
+          "Exam Attempts"
+        ],
+        "summary": "Get Attempt Endpoint",
+        "description": "Get attempt details and saved answers.",
+        "operationId": "get_attempt_endpoint_attempts__attempt_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attempts/{attempt_id}/answers": {
+      "put": {
+        "tags": [
+          "Exam Attempts"
+        ],
+        "summary": "Autosave Answers Endpoint",
+        "description": "Autosave student answers. Fails if attempt is locked or submitted.",
+        "operationId": "autosave_answers_endpoint_attempts__attempt_id__answers_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerSave"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attempts/{attempt_id}/events": {
+      "post": {
+        "tags": [
+          "Exam Attempts"
+        ],
+        "summary": "Proctoring Event Endpoint",
+        "description": "Receive proctoring violation event (TAB_SWITCH, FULLSCREEN_EXIT).\n\nIf attempt is In Progress, logs violation, sets flagged=true, status=Auto-Locked,\nand automatically evaluates saved partial answers.",
+        "operationId": "proctoring_event_endpoint_attempts__attempt_id__events_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attempts/{attempt_id}/submit": {
+      "post": {
+        "tags": [
+          "Exam Attempts"
+        ],
+        "summary": "Submit Attempt Endpoint",
+        "description": "Submit attempt and calculate evaluation results.",
+        "operationId": "submit_attempt_endpoint_attempts__attempt_id__submit_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/results": {
+      "get": {
+        "tags": [
+          "Results"
+        ],
+        "summary": "List Results",
+        "description": "List results accessible to the current user.",
+        "operationId": "list_results_results_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/results/attempt/{attempt_id}": {
+      "get": {
+        "tags": [
+          "Results"
+        ],
+        "summary": "Get Attempt Result",
+        "description": "Get detailed result for a single attempt, including question review.",
+        "operationId": "get_attempt_result_results_attempt__attempt_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/student": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Student Dashboard Endpoint",
+        "description": "Student dashboard: marks, upcoming exams, attempt history.",
+        "operationId": "student_dashboard_endpoint_dashboard_student_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/dashboard/teacher": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Teacher Dashboard Endpoint",
+        "description": "Teacher dashboard: own subjects, attempts, averages, violation counts.",
+        "operationId": "teacher_dashboard_endpoint_dashboard_teacher_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subject_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/parent": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Parent Dashboard Endpoint",
+        "description": "Parent dashboard: linked children exams and published results.",
+        "operationId": "parent_dashboard_endpoint_dashboard_parent_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "student_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Student Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/hod/monitor": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Hod Monitor Endpoint",
+        "description": "HOD live exam activity (refreshes every 30s).",
+        "operationId": "hod_monitor_endpoint_dashboard_hod_monitor_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subject_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/hod/reports": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Hod Reports Endpoint",
+        "description": "HOD all users and results reports with filters and pagination.",
+        "operationId": "hod_reports_endpoint_dashboard_hod_reports_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subject_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject Id"
+            }
+          },
+          {
+            "name": "semester",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Semester"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/admin": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Admin Dashboard Endpoint",
+        "description": "Admin dashboard overview and settings.",
+        "operationId": "admin_dashboard_endpoint_dashboard_admin_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/ai-help": {
+      "post": {
+        "tags": [
+          "AI Concept Help"
+        ],
+        "summary": "Ask Ai Concept Help",
+        "description": "Student requests plain-language AI explanation for a wrongly answered question.",
+        "operationId": "ask_ai_concept_help_ai_help_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIHelpRequestIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/ai-help/history": {
+      "get": {
+        "tags": [
+          "AI Concept Help"
+        ],
+        "summary": "Get Ai Help History",
+        "description": "View past AI concept explanations for the logged in student.",
+        "operationId": "get_ai_help_history_ai_help_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/settings": {
+      "get": {
+        "tags": [
+          "Platform Settings"
+        ],
+        "summary": "Get All Settings",
+        "description": "Admin reads all platform settings.",
+        "operationId": "get_all_settings_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Platform Settings"
+        ],
+        "summary": "Update Platform Setting",
+        "description": "Admin updates a platform setting (e.g. AI_HELP_DAILY_LIMIT).\n\nValidation:\n- Numeric settings must be integers > 0.",
+        "operationId": "update_platform_setting_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AIHelpRequestIn": {
+        "properties": {
+          "attempt_id": {
+            "type": "integer",
+            "title": "Attempt Id"
+          },
+          "question_id": {
+            "type": "integer",
+            "title": "Question Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attempt_id",
+          "question_id"
+        ],
+        "title": "AIHelpRequestIn"
+      },
+      "AnswerKeyCreate": {
+        "properties": {
+          "answers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Answers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answers"
+        ],
+        "title": "AnswerKeyCreate",
+        "description": "Schema for submitting answer key."
+      },
+      "AnswerSave": {
+        "properties": {
+          "answers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Answers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answers"
+        ],
+        "title": "AnswerSave",
+        "description": "Schema for saving/autosaving answers."
+      },
+      "AttemptResponse": {
+        "properties": {
+          "attempt_id": {
+            "type": "integer",
+            "title": "Attempt Id"
+          },
+          "exam_id": {
+            "type": "integer",
+            "title": "Exam Id"
+          },
+          "student_id": {
+            "type": "integer",
+            "title": "Student Id"
+          },
+          "start_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start At"
+          },
+          "submit_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submit At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "flagged": {
+            "type": "boolean",
+            "title": "Flagged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attempt_id",
+          "exam_id",
+          "student_id",
+          "status",
+          "flagged"
+        ],
+        "title": "AttemptResponse",
+        "description": "Schema for attempt response."
+      },
+      "EventCreate": {
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "title": "Event Type"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_type",
+          "timestamp"
+        ],
+        "title": "EventCreate",
+        "description": "Schema for proctoring event."
+      },
+      "ExamCreate": {
+        "properties": {
+          "subject_id": {
+            "type": "integer",
+            "title": "Subject Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "start_time": {
+            "type": "string",
+            "title": "Start Time"
+          },
+          "end_time": {
+            "type": "string",
+            "title": "End Time"
+          },
+          "duration_min": {
+            "type": "integer",
+            "title": "Duration Min"
+          },
+          "total_marks": {
+            "type": "integer",
+            "title": "Total Marks"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "Draft"
+          }
+        },
+        "type": "object",
+        "required": [
+          "subject_id",
+          "title",
+          "start_time",
+          "end_time",
+          "duration_min",
+          "total_marks"
+        ],
+        "title": "ExamCreate",
+        "description": "Schema for creating an exam. Validates all fields per UT-EXM rules."
+      },
+      "ExamResponse": {
+        "properties": {
+          "exam_id": {
+            "type": "integer",
+            "title": "Exam Id"
+          },
+          "subject_id": {
+            "type": "integer",
+            "title": "Subject Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "end_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Time"
+          },
+          "duration_min": {
+            "type": "integer",
+            "title": "Duration Min"
+          },
+          "total_marks": {
+            "type": "integer",
+            "title": "Total Marks"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "question_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "exam_id",
+          "subject_id",
+          "title",
+          "start_time",
+          "end_time",
+          "duration_min",
+          "total_marks",
+          "status"
+        ],
+        "title": "ExamResponse",
+        "description": "Schema for exam response."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "Schema for login."
+      },
+      "LoginResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "role",
+          "user_id",
+          "name"
+        ],
+        "title": "LoginResponse",
+        "description": "Schema for login response."
+      },
+      "QuestionCreate": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Options"
+          },
+          "marks": {
+            "type": "integer",
+            "title": "Marks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "options",
+          "marks"
+        ],
+        "title": "QuestionCreate",
+        "description": "Schema for creating a question."
+      },
+      "QuestionResponse": {
+        "properties": {
+          "question_id": {
+            "type": "integer",
+            "title": "Question Id"
+          },
+          "exam_id": {
+            "type": "integer",
+            "title": "Exam Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Options"
+          },
+          "marks": {
+            "type": "integer",
+            "title": "Marks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question_id",
+          "exam_id",
+          "text",
+          "options",
+          "marks"
+        ],
+        "title": "QuestionResponse",
+        "description": "Schema for question response."
+      },
+      "SettingUpdate": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "SettingUpdate"
+      },
+      "SubmitResponse": {
+        "properties": {
+          "attempt_id": {
+            "type": "integer",
+            "title": "Attempt Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attempt_id",
+          "status",
+          "message"
+        ],
+        "title": "SubmitResponse",
+        "description": "Schema for submit response."
+      },
+      "UserCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ],
+        "title": "UserCreate",
+        "description": "Schema for creating a user. Validates all fields per UT-USR rules."
+      },
+      "UserResponse": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name",
+          "email",
+          "role",
+          "status"
+        ],
+        "title": "UserResponse",
+        "description": "Schema for user response (no password)."
+      },
+      "UserUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "title": "UserUpdate",
+        "description": "Schema for updating a user."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
