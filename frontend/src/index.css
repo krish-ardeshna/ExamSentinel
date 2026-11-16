@@ -1,24 +1,115 @@
-:root {
-  --primary: #1e3a8a;
-  --primary-hover: #1e40af;
-  --primary-light: #dbeafe;
-  --secondary: #0d9488;
-  --accent: #f59e0b;
-  --danger: #dc2626;
-  --danger-light: #fee2e2;
-  --success: #16a34a;
-  --success-light: #dcfce7;
-  --warning: #d97706;
-  --warning-light: #fef3c7;
+/* ==========================================================================
+   ExamSentinel - Black & White / Dark & Light Theme System
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Core monochrome palette (Light) */
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
-  --text-main: #0f172a;
+  --bg-card-subtle: #f1f5f9;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --text-main: #09090b;
   --text-muted: #64748b;
+  --text-inverse: #ffffff;
   --border: #e2e8f0;
+  --border-focus: #09090b;
+  --toggle-bg: #ffffff;
+
+  /* Primary Accent: Crisp Black in light mode */
+  --primary: #09090b;
+  --primary-hover: #27272a;
+  --primary-text: #ffffff;
+  --primary-light: #f4f4f5;
+
+  /* Navigation */
+  --nav-bg: #09090b;
+  --nav-text: #ffffff;
+  --nav-border: #27272a;
+  --nav-badge-bg: #27272a;
+
+  /* Status Colors (Subtle & High Contrast) */
+  --success: #16a34a;
+  --success-light: #dcfce7;
+  --danger: #dc2626;
+  --danger-light: #fee2e2;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --info: #2563eb;
+  --info-light: #dbeafe;
+
+  /* Form Elements */
+  --form-bg: #ffffff;
+  --form-border: #cbd5e1;
+  --form-text: #09090b;
+
+  /* Table styling */
+  --table-th-bg: #f8fafc;
+  --table-th-text: #475569;
+  --table-hover: #f1f5f9;
+
+  /* Elevation Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --login-bg: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
 }
+
+[data-theme="dark"] {
+  /* Core monochrome palette (Dark) */
+  --bg-main: #09090b;
+  --bg-card: #141416;
+  --bg-card-subtle: #1c1c20;
+  --bg-overlay: rgba(0, 0, 0, 0.85);
+  --text-main: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-inverse: #09090b;
+  --border: #27272a;
+  --border-focus: #fafafa;
+  --toggle-bg: #1c1c20;
+
+  /* Primary Accent: Crisp White in dark mode */
+  --primary: #fafafa;
+  --primary-hover: #e4e4e7;
+  --primary-text: #09090b;
+  --primary-light: #27272a;
+
+  /* Navigation */
+  --nav-bg: #09090b;
+  --nav-text: #fafafa;
+  --nav-border: #27272a;
+  --nav-badge-bg: #27272a;
+
+  /* Status Colors */
+  --success: #22c55e;
+  --success-light: rgba(34, 197, 94, 0.15);
+  --danger: #ef4444;
+  --danger-light: rgba(239, 68, 68, 0.15);
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.15);
+  --info: #38bdf8;
+  --info-light: rgba(56, 189, 248, 0.15);
+
+  /* Form Elements */
+  --form-bg: #141416;
+  --form-border: #3f3f46;
+  --form-text: #fafafa;
+
+  /* Table styling */
+  --table-th-bg: #18181b;
+  --table-th-text: #a1a1aa;
+  --table-hover: #1f1f23;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+  --login-bg: linear-gradient(135deg, #000000 0%, #09090b 50%, #121214 100%);
+}
+
+/* ==========================================================================
+   Base Elements
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -32,10 +123,11 @@ body {
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 a {
-  color: var(--primary);
+  color: inherit;
   text-decoration: none;
 }
 
@@ -44,7 +136,10 @@ button {
   font-family: inherit;
 }
 
-/* Layout containers */
+/* ==========================================================================
+   Layout & Components
+   ========================================================================== */
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -58,8 +153,10 @@ button {
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -68,12 +165,13 @@ button {
   font-weight: 600;
   border-radius: 9999px;
   text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 .badge-success { background: var(--success-light); color: var(--success); }
 .badge-danger { background: var(--danger-light); color: var(--danger); }
 .badge-warning { background: var(--warning-light); color: var(--warning); }
-.badge-info { background: var(--primary-light); color: var(--primary); }
+.badge-info { background: var(--info-light); color: var(--info); }
 
 /* Form inputs */
 .form-group {
@@ -91,18 +189,19 @@ button {
 .form-input, .form-select, .form-textarea {
   width: 100%;
   padding: 0.625rem 0.875rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--form-border);
   border-radius: 0.5rem;
   font-size: 0.9375rem;
   font-family: inherit;
-  background-color: #fff;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background-color: var(--form-bg);
+  color: var(--form-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
 }
 
 /* Buttons */
@@ -115,21 +214,46 @@ button {
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: 0.5rem;
-  border: none;
+  border: 1px solid transparent;
   transition: all 0.15s ease;
 }
 
-.btn-primary { background: var(--primary); color: white; }
-.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-text);
+}
 
-.btn-secondary { background: #e2e8f0; color: #1e293b; }
-.btn-secondary:hover { background: #cbd5e1; }
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
 
-.btn-danger { background: var(--danger); color: white; }
-.btn-danger:hover { background: #b91c1c; }
+.btn-secondary {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  border-color: var(--border);
+}
 
-.btn-success { background: var(--success); color: white; }
-.btn-success:hover { background: #15803d; }
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  filter: brightness(0.9);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+
+.btn-success:hover {
+  filter: brightness(0.9);
+}
 
 .btn-sm {
   padding: 0.375rem 0.75rem;
@@ -149,24 +273,25 @@ button {
 }
 
 .data-table th {
-  background-color: #f1f5f9;
+  background-color: var(--table-th-bg);
   padding: 0.75rem 1rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--table-th-text);
   border-bottom: 2px solid var(--border);
 }
 
 .data-table td {
   padding: 0.875rem 1rem;
   border-bottom: 1px solid var(--border);
+  color: var(--text-main);
   vertical-align: middle;
 }
 
 .data-table tr:hover {
-  background-color: #f8fafc;
+  background-color: var(--table-hover);
 }
 
-/* Grids & Flex */
+/* Utilities */
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }

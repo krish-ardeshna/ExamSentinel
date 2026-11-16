@@ -216,20 +216,20 @@ export default function ExamScreen() {
   // Fullscreen Gate Modal
   if (!isFullscreen) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a', padding: '1.5rem' }}>
-        <div style={{ maxWidth: '520px', width: '100%', background: '#fff', borderRadius: '1rem', padding: '2rem', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', padding: '1rem', background: '#dbeafe', borderRadius: '50%', marginBottom: '1rem' }}>
-            <Maximize size={42} color="#1e40af" />
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--login-bg)', padding: '1.5rem' }}>
+        <div style={{ maxWidth: '520px', width: '100%', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '1rem', padding: '2rem', textAlign: 'center', boxShadow: 'var(--shadow-lg)' }}>
+          <div style={{ display: 'inline-flex', padding: '1rem', background: 'var(--primary-light)', border: '1px solid var(--border)', borderRadius: '50%', marginBottom: '1rem' }}>
+            <Maximize size={42} color="currentColor" />
           </div>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.375rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
             Proctored Assessment Gate
           </h2>
-          <h3 style={{ fontSize: '1.125rem', color: '#1e40af', marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '1.125rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
             {attempt?.exam_title || 'Online Examination'}
           </h3>
-          <div style={{ textAlign: 'left', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '0.5rem', padding: '1rem', marginBottom: '1.5rem', fontSize: '0.875rem', color: '#334155' }}>
+          <div style={{ textAlign: 'left', background: 'var(--bg-card-subtle)', border: '1px solid var(--border)', borderRadius: '0.5rem', padding: '1rem', marginBottom: '1.5rem', fontSize: '0.875rem', color: 'var(--text-main)' }}>
             <p style={{ fontWeight: '600', marginBottom: '0.5rem' }}>Strict Proctoring Rules:</p>
-            <ul style={{ paddingLeft: '1.25rem', lineHeight: '1.6' }}>
+            <ul style={{ paddingLeft: '1.25rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
               <li>The exam runs strictly in <strong>Fullscreen Mode</strong>.</li>
               <li><strong>Switching tabs</strong> or minimizing the window will <strong>immediately auto-lock</strong> your exam.</li>
               <li><strong>Exiting fullscreen</strong> will <strong>immediately auto-lock</strong> your exam.</li>
@@ -247,9 +247,9 @@ export default function ExamScreen() {
   const currentQ = questions[currentIdx];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f1f5f9' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-main)' }}>
       {/* Top Proctoring Header */}
-      <header style={{ background: '#1e3a8a', color: 'white', padding: '0.75rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.15)' }}>
+      <header style={{ background: 'var(--nav-bg)', color: 'var(--nav-text)', borderBottom: '1px solid var(--nav-border)', padding: '0.75rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: 'var(--shadow-sm)' }}>
         <div>
           <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', opacity: 0.8 }}>Proctored Session</span>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '700' }}>{attempt?.exam_title}</h2>
@@ -292,13 +292,13 @@ export default function ExamScreen() {
             <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1e3a8a' }}>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-main)' }}>
                     Question {currentIdx + 1} of {questions.length}
                   </span>
                   <span className="badge badge-info">{currentQ.marks} {currentQ.marks === 1 ? 'Mark' : 'Marks'}</span>
                 </div>
 
-                <p style={{ fontSize: '1.0625rem', fontWeight: '600', color: '#0f172a', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '1.0625rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
                   {currentQ.text}
                 </p>
 
@@ -315,8 +315,9 @@ export default function ExamScreen() {
                           gap: '0.875rem',
                           padding: '1rem',
                           borderRadius: '0.5rem',
-                          border: isSelected ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                          background: isSelected ? '#eff6ff' : '#ffffff',
+                          border: isSelected ? '2px solid var(--border-focus)' : '1px solid var(--border)',
+                          background: isSelected ? 'var(--primary-light)' : 'var(--bg-card)',
+                          color: 'var(--text-main)',
                           cursor: 'pointer',
                           transition: 'all 0.15s ease',
                         }}
@@ -328,10 +329,10 @@ export default function ExamScreen() {
                           onChange={() => {}}
                           style={{ width: '1.125rem', height: '1.125rem' }}
                         />
-                        <span style={{ fontWeight: '700', minWidth: '1.5rem', color: isSelected ? '#1e40af' : '#64748b' }}>
+                        <span style={{ fontWeight: '700', minWidth: '1.5rem', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)' }}>
                           {key}.
                         </span>
-                        <span style={{ fontSize: '0.9375rem', color: '#1e293b' }}>
+                        <span style={{ fontSize: '0.9375rem', color: 'var(--text-main)' }}>
                           {optText}
                         </span>
                       </label>
@@ -376,17 +377,17 @@ export default function ExamScreen() {
               {questions.map((q, idx) => {
                 const isAnswered = !!answers[q.question_id];
                 const isCurrent = idx === currentIdx;
-                let bg = '#f1f5f9';
-                let color = '#475569';
-                let border = '1px solid #cbd5e1';
+                let bg = 'var(--bg-card-subtle)';
+                let color = 'var(--text-muted)';
+                let border = '1px solid var(--border)';
 
                 if (isAnswered) {
-                  bg = '#22c55e';
+                  bg = 'var(--success)';
                   color = '#fff';
-                  border = '1px solid #16a34a';
+                  border = '1px solid var(--success)';
                 }
                 if (isCurrent) {
-                  border = '2px solid #1e3a8a';
+                  border = '2px solid var(--border-focus)';
                 }
 
                 return (
@@ -418,7 +419,7 @@ export default function ExamScreen() {
                 <span>Answered ({Object.keys(answers).length})</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ width: '12px', height: '12px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '2px' }}></span>
+                <span style={{ width: '12px', height: '12px', background: 'var(--bg-card-subtle)', border: '1px solid var(--border)', borderRadius: '2px' }}></span>
                 <span>Unanswered ({Math.max(0, questions.length - Object.keys(answers).length)})</span>
               </div>
             </div>

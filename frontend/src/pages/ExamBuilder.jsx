@@ -282,9 +282,9 @@ export default function ExamBuilder() {
         {isEditing && (
           <div>
             {/* Status & Publish Bar */}
-            <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
+            <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-card-subtle)' }}>
               <div>
-                <span style={{ fontSize: '0.875rem', color: '#64748b' }}>Current Status: </span>
+                <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Current Status: </span>
                 <span className={`badge ${exam?.status === 'Published' ? 'badge-success' : 'badge-warning'}`}>
                   {exam?.status}
                 </span>

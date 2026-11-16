@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Lock, Mail, AlertCircle, Server } from 'lucide-react';
 import { getApiBaseUrl, setApiBaseUrl } from '../services/api';
+import ThemeToggle from '../components/ThemeToggle';
 
 const DEMO_ACCOUNTS = [
   { role: 'Student', email: 'riya.student@oepms.edu', pass: 'Stud@1234', label: 'Student (Riya)' },
@@ -51,14 +52,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)' }}>
-      <div style={{ maxWidth: '440px', width: '100%', background: 'white', borderRadius: '1rem', padding: '2rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'var(--login-bg)', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>
+        <ThemeToggle showLabel />
+      </div>
+
+      <div style={{ maxWidth: '440px', width: '100%', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '1rem', padding: '2rem', boxShadow: 'var(--shadow-lg)' }}>
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div style={{ display: 'inline-flex', padding: '0.75rem', background: '#dbeafe', borderRadius: '1rem', marginBottom: '0.75rem' }}>
-            <ShieldCheck size={36} color="#1e40af" />
+          <div style={{ display: 'inline-flex', padding: '0.75rem', background: 'var(--primary-light)', borderRadius: '1rem', marginBottom: '0.75rem', border: '1px solid var(--border)' }}>
+            <ShieldCheck size={36} color="currentColor" />
           </div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0f172a' }}>OEPMS Portal</h1>
-          <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Online Exam Proctoring & Management System</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)' }}>OEPMS Portal</h1>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Online Exam Proctoring & Management System</p>
         </div>
 
         {error && (
@@ -141,8 +146,8 @@ export default function LoginPage() {
             </button>
 
             {showConfig && (
-              <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', textAlign: 'left' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '0.25rem' }}>
+              <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'var(--bg-card-subtle)', border: '1px solid var(--border)', borderRadius: '0.5rem', textAlign: 'left' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-main)', display: 'block', marginBottom: '0.25rem' }}>
                   Backend Server Base URL:
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -151,7 +156,8 @@ export default function LoginPage() {
                     value={apiUrl}
                     onChange={(e) => setApiUrl(e.target.value)}
                     placeholder="http://localhost:8000"
-                    style={{ flex: 1, padding: '0.4rem 0.5rem', fontSize: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '0.375rem' }}
+                    className="form-input"
+                    style={{ flex: 1, padding: '0.4rem 0.5rem', fontSize: '0.75rem' }}
                   />
                   <button
                     type="button"

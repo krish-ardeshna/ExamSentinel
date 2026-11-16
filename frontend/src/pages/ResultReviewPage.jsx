@@ -172,7 +172,7 @@ export default function ResultReviewPage() {
                   )}
                 </div>
 
-                <p style={{ fontSize: '1rem', fontWeight: '600', color: '#1e293b', marginBottom: '1rem' }}>
+                <p style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '1rem' }}>
                   {q.text}
                 </p>
 
@@ -182,9 +182,9 @@ export default function ResultReviewPage() {
                     const isSelected = q.selected_option === key;
                     const isOfficialCorrect = q.correct_option === key;
 
-                    let bg = '#f8fafc';
-                    let border = '1px solid #e2e8f0';
-                    let textCol = '#334155';
+                    let bg = 'var(--bg-card-subtle)';
+                    let border = '1px solid var(--border)';
+                    let textCol = 'var(--text-main)';
 
                     if (isOfficialCorrect) {
                       bg = '#dcfce7';
@@ -238,42 +238,42 @@ export default function ResultReviewPage() {
 
       {/* AI Concept Explanation Modal */}
       {aiModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
-          <div style={{ background: '#ffffff', borderRadius: '1rem', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.75rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--bg-overlay)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '1rem', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.75rem', boxShadow: 'var(--shadow-lg)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sparkles size={22} color="#7c3aed" />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#4c1d95' }}>AI Concept Explainer</h3>
+                <Sparkles size={22} color="currentColor" />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)' }}>AI Concept Explainer</h3>
               </div>
               <button
                 onClick={() => setAiModalOpen(false)}
-                style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', color: '#94a3b8', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', color: 'var(--text-muted)', cursor: 'pointer' }}
               >
                 ✕
               </button>
             </div>
 
             {selectedQuestion && (
-              <div style={{ background: '#f5f3ff', border: '1px solid #ddd6fe', borderRadius: '0.5rem', padding: '0.875rem', marginBottom: '1.25rem', fontSize: '0.875rem' }}>
-                <p style={{ fontWeight: '600', color: '#5b21b6', marginBottom: '0.375rem' }}>Question:</p>
-                <p style={{ color: '#1e1b4b', marginBottom: '0.5rem' }}>{selectedQuestion.text}</p>
+              <div style={{ background: 'var(--bg-card-subtle)', border: '1px solid var(--border)', borderRadius: '0.5rem', padding: '0.875rem', marginBottom: '1.25rem', fontSize: '0.875rem' }}>
+                <p style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.375rem' }}>Question:</p>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>{selectedQuestion.text}</p>
                 <div style={{ display: 'flex', gap: '1rem', fontSize: '0.8125rem' }}>
-                  <span>Your Answer: <strong style={{ color: '#dc2626' }}>{selectedQuestion.selected_option || 'None'}</strong></span>
-                  <span>Correct Answer: <strong style={{ color: '#16a34a' }}>{selectedQuestion.correct_option}</strong></span>
+                  <span>Your Answer: <strong style={{ color: 'var(--danger)' }}>{selectedQuestion.selected_option || 'None'}</strong></span>
+                  <span>Correct Answer: <strong style={{ color: 'var(--success)' }}>{selectedQuestion.correct_option}</strong></span>
                 </div>
               </div>
             )}
 
             {aiLoading && (
               <div style={{ textAlign: 'center', padding: '2rem' }}>
-                <RefreshCw size={28} className="animate-spin" color="#7c3aed" style={{ margin: '0 auto 1rem', animation: 'spin 1s linear infinite' }} />
-                <p style={{ color: '#6d28d9', fontWeight: '600' }}>Consulting Google Gemini AI...</p>
-                <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Generating personalized concept clarification (15s timeout)</p>
+                <RefreshCw size={28} className="animate-spin" color="currentColor" style={{ margin: '0 auto 1rem', animation: 'spin 1s linear infinite' }} />
+                <p style={{ color: 'var(--text-main)', fontWeight: '600' }}>Consulting Google Gemini AI...</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Generating personalized concept clarification (15s timeout)</p>
               </div>
             )}
 
             {aiError && (
-              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem', padding: '1rem', color: '#991b1b', marginBottom: '1rem' }}>
+              <div style={{ background: 'var(--danger-light)', border: '1px solid var(--danger)', borderRadius: '0.5rem', padding: '1rem', color: 'var(--danger)', marginBottom: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <AlertCircle size={18} />
                   <strong>AI Explanation Unavailable</strong>
@@ -290,12 +290,12 @@ export default function ResultReviewPage() {
             )}
 
             {aiResponse && !aiLoading && (
-              <div style={{ background: '#ffffff', borderRadius: '0.5rem', lineHeight: '1.7', fontSize: '0.9375rem', color: '#1e293b', whiteSpace: 'pre-line' }}>
+              <div style={{ background: 'var(--bg-card-subtle)', border: '1px solid var(--border)', padding: '1rem', borderRadius: '0.5rem', lineHeight: '1.7', fontSize: '0.9375rem', color: 'var(--text-main)', whiteSpace: 'pre-line' }}>
                 {aiResponse}
               </div>
             )}
 
-            <div style={{ marginTop: '1.5rem', textAlign: 'right', borderTop: '1px solid #e2e8f0', paddingTop: '1rem' }}>
+            <div style={{ marginTop: '1.5rem', textAlign: 'right', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
               <button onClick={() => setAiModalOpen(false)} className="btn btn-secondary">
                 Close
               </button>
